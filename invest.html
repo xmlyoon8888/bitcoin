@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>적립식 투자 시뮬레이션</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .input-container {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+        }
+        canvas {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>적립식 투자 시뮬레이션</h1>
+    <div class="input-container">
+        <label for="initialInvestment">초기 투자 금액:</label>
+        <input type="number" id="initialInvestment" placeholder="예: 100000" value="0" required>
+
+        <label for="monthlyInvestment">월 적립액 (원):</label>
+        <input type="number" id="monthlyInvestment" placeholder="예: 100000" required>
+        
+        <label for="annualInterest">연간 이자율 (%):</label>
+        <input type="number" id="annualInterest" step="0.1" placeholder="예: 5.0" required>
+
+        <label for="dividendRate">배당율 (%):</label>
+        <input type="number" id="dividendRate" step="0.1" placeholder="예: 5.0" required>
+        
+        <label for="investmentPeriod"> 적립식 투자 기간 (년):</label>
+        <input type="number" id="investmentPeriod" placeholder="예: 10" required>
+
+        <label for="justPeriod">투자 기간 (년):</label>
+        <input type="number" id="justPeriod" placeholder="예: 10" required>
+        
+        <button onclick="runSimulation()">Simulation</button>
+    </div>
+    <div id="result"></div>
+    <canvas id="investmentChart"></canvas>
+
+    <script>
+        let chart = null;
+
+        function calculateCompoundInterest(initialInvestment, monthlyInvestment, annualInterest, dividendRate, years, justPeriod) {
+            const monthlyRate = (annualInterest + dividendRate) / 100 / 12;
+            const months = years * 12;
+            const justMonths = justPeriod * 12;
+            let balance = initialInvestment;
+            const balances = [0];
+
+            for (let i = 1; i <= months; i++) {
+                balance = (balance + monthlyInvestment) * (1 + monthlyRate);
+                console.log(i, balance);
+                if (i % 12 === 0) {
+                    balances.push(balance);
+                }
+            }
+
+            for (let i = 1; i <= justMonths; i++) {
+                balance = balance * (1 + monthlyRate);
+                console.log(i, balance);
+                if (i % 12 === 0) {
+                    balances.push(balance);
+                }
+            }
+
+            return balances;
+        }
+
+        function runSimulation() {
+            const initialInvestment = parseFloat(document.getElementById('initialInvestment').value);
+            const monthlyInvestment = parseFloat(document.getElementById('monthlyInvestment').value);
+            const annualInterest = parseFloat(document.getElementById('annualInterest').value);
+            const dividendRate = parseFloat(document.getElementById('dividendRate').value);
+            const years = parseInt(document.getElementById('investmentPeriod').value);
+            const justPeriod = parseInt(document.getElementById('justPeriod').value);
+
+            const balances = calculateCompoundInterest(initialInvestment, monthlyInvestment, annualInterest, dividendRate, years, justPeriod);
+
+            if (isNaN(monthlyInvestment) || isNaN(annualInterest) || isNaN(years)) {
+                alert('모든 입력값을 올바르게 입력해주세요.');
+                return;
+            }
+
+            const finalAmount = balances[balances.length - 1];
+
+            document.getElementById('result').innerHTML = `
+                <h3>시뮬레이션 결과</h3>
+                <p>초기 투자금: ${initialInvestment.toLocaleString()}원</p>
+                <p>월 적립액: ${monthlyInvestment.toLocaleString()}원</p>
+                <p>연간 이자율: ${annualInterest}%</p>
+                <p>적립식 투자 기간 (년): ${years}년</p>
+                <p>운영 투자 기간 (년): ${justPeriod}년</p>
+                <p>최종 금액: ${Math.round(finalAmount).toLocaleString()}원</p>
+            `;
+
+            const labels = Array.from({ length: years + 1 }, (_, i) => `Year ${i}`);
+            const ctx = document.getElementById('investmentChart').getContext('2d');
+
+            if (chart) {
+                chart.destroy();
+            }
+
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '투자 금액',
+                        data: balances,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        fill: true,
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '금액 (원)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: '년도'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
