@@ -8,21 +8,26 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
         .input-container {
             margin-bottom: 20px;
         }
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        input {
-            width: 100%;
-            padding: 8px;
+        .input-row {
+            display: flex;
             margin-bottom: 10px;
+        }
+        .input-row label {
+            flex: 1;
+            margin-right: 10px;
+            text-align: right;
+            line-height: 30px;
+        }
+        .input-row input {
+            flex: 2;
+            height: 30px;
         }
         button {
             padding: 10px 20px;
@@ -45,25 +50,29 @@
 <body>
     <h1>적립식 투자 시뮬레이션</h1>
     <div class="input-container">
-        <label for="initialInvestment">초기 투자 금액:</label>
-        <input type="number" id="initialInvestment" placeholder="예: 100000" value="0" required>
-
-        <label for="monthlyInvestment">월 적립액 (원):</label>
-        <input type="number" id="monthlyInvestment" placeholder="예: 100000" required>
-        
-        <label for="annualInterest">연간 이자율 (%):</label>
-        <input type="number" id="annualInterest" step="0.1" placeholder="예: 5.0" required>
-
-        <label for="dividendRate">배당율 (%):</label>
-        <input type="number" id="dividendRate" step="0.1" placeholder="예: 5.0" required>
-        
-        <label for="investmentPeriod"> 적립식 투자 기간 (년):</label>
-        <input type="number" id="investmentPeriod" placeholder="예: 10" required>
-
-        <label for="justPeriod">투자 기간 (년):</label>
-        <input type="number" id="justPeriod" placeholder="예: 10" required>
-        
-        <button onclick="runSimulation()">Simulation</button>
+        <div class="input-row">
+            <label for="initialInvestment">초기 투자 금액:</label>
+            <input type="number" id="initialInvestment" placeholder="예: 100000" value="20000000" required>
+            <label for="monthlyInvestment">월 적립액 (원):</label>
+            <input type="number" id="monthlyInvestment" placeholder="예: 100000" value="300000" required>
+        </div>
+        <div class="input-row">
+            <label for="annualInterest">연간 투자 수익율 (%):</label>
+            <input type="number" id="annualInterest" step="0.1" placeholder="예: 5.0" value="5" required>
+            <label for="dividendRate">배당율 (%):</label>
+            <input type="number" id="dividendRate" step="0.1" placeholder="예: 5.0" value="2" required>
+        </div>
+        <div class="input-row">
+            <label for="investmentPeriod">적립 기간 (년):</label>
+            <input type="number" id="investmentPeriod" placeholder="예: 10" value="30" required>
+            <label for="justPeriod">투자 기간 (년):</label>
+            <input type="number" id="justPeriod" placeholder="예: 10" value="30" required>
+        </div>
+        <div class="input-row">
+            <label></label>
+            <label></label>
+            <button onclick="runSimulation()">Simulation</button>
+        </div>
     </div>
     <div id="result"></div>
     <canvas id="investmentChart"></canvas>
@@ -76,25 +85,31 @@
             const months = years * 12;
             const justMonths = justPeriod * 12;
             let balance = initialInvestment;
+            let totalInv = initialInvestment;
             const balances = [0];
+            const totalInvestments = [0];
 
             for (let i = 1; i <= months; i++) {
+                totalInv = totalInv + monthlyInvestment
                 balance = (balance + monthlyInvestment) * (1 + monthlyRate);
                 console.log(i, balance);
                 if (i % 12 === 0) {
                     balances.push(balance);
+                    totalInvestments.push(totalInv);
                 }
             }
 
             for (let i = 1; i <= justMonths; i++) {
+                totalInv = totalInv
                 balance = balance * (1 + monthlyRate);
                 console.log(i, balance);
                 if (i % 12 === 0) {
                     balances.push(balance);
+                    totalInvestments.push(totalInv);
                 }
             }
 
-            return balances;
+            return {balances, totalInvestments};
         }
 
         function runSimulation() {
@@ -104,8 +119,9 @@
             const dividendRate = parseFloat(document.getElementById('dividendRate').value);
             const years = parseInt(document.getElementById('investmentPeriod').value);
             const justPeriod = parseInt(document.getElementById('justPeriod').value);
+            const totalPeriod = years + justPeriod;
 
-            const balances = calculateCompoundInterest(initialInvestment, monthlyInvestment, annualInterest, dividendRate, years, justPeriod);
+            const {balances, totalInvestments} = calculateCompoundInterest(initialInvestment, monthlyInvestment, annualInterest, dividendRate, years, justPeriod);
 
             if (isNaN(monthlyInvestment) || isNaN(annualInterest) || isNaN(years)) {
                 alert('모든 입력값을 올바르게 입력해주세요.');
@@ -116,15 +132,11 @@
 
             document.getElementById('result').innerHTML = `
                 <h3>시뮬레이션 결과</h3>
-                <p>초기 투자금: ${initialInvestment.toLocaleString()}원</p>
-                <p>월 적립액: ${monthlyInvestment.toLocaleString()}원</p>
-                <p>연간 이자율: ${annualInterest}%</p>
-                <p>적립식 투자 기간 (년): ${years}년</p>
-                <p>운영 투자 기간 (년): ${justPeriod}년</p>
+                <p>총 적립 금액: ${Math.round(totalInvestments[totalInvestments.length - 1]).toLocaleString()}원</p>
                 <p>최종 금액: ${Math.round(finalAmount).toLocaleString()}원</p>
             `;
 
-            const labels = Array.from({ length: years + 1 }, (_, i) => `Year ${i}`);
+            const labels = Array.from({ length: totalPeriod + 1 }, (_, i) => `Year ${i}`);
             const ctx = document.getElementById('investmentChart').getContext('2d');
 
             if (chart) {
@@ -140,6 +152,12 @@
                         data: balances,
                         borderColor: 'rgba(75, 192, 192, 1)',
                         backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        fill: true,
+                    },{
+                        label: '입금액',
+                        data: totalInvestments,
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
                         fill: true,
                     }]
                 },
