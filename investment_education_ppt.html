@@ -1,0 +1,1980 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>20대를 위한 투자 교육</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+        }
+
+        .presentation {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            display: none;
+            padding: 40px;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            position: absolute;
+            animation: slideIn 0.5s ease-in-out;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .slide h1 {
+            font-size: 3em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .slide h2 {
+            font-size: 2.5em;
+            color: #34495e;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .slide h3 {
+            font-size: 1.8em;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: normal;
+        }
+
+        .slide p {
+            font-size: 1.4em;
+            line-height: 1.8;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 20px;
+            max-width: 800px;
+        }
+
+        .slide ul {
+            font-size: 1.3em;
+            color: #2c3e50;
+            text-align: left;
+            max-width: 600px;
+        }
+
+        .slide li {
+            margin-bottom: 15px;
+            padding-left: 10px;
+        }
+
+        .question {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 50px;
+            font-size: 1.6em;
+            font-weight: bold;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .insight {
+            background: linear-gradient(45deg, #4834d4, #686de0);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.3em;
+            margin: 20px 0;
+            font-style: italic;
+        }
+
+        .stat {
+            background: linear-gradient(45deg, #ff9ff3, #f368e0);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            padding: 12px 25px;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            color: #2c3e50;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .slide-number {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 1em;
+        }
+
+        .cover-slide {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .cover-slide h1 {
+            color: white;
+            font-size: 4em;
+            margin-bottom: 30px;
+        }
+
+        .cover-slide h3 {
+            color: #ecf0f1;
+            font-size: 2em;
+        }
+
+        .comparison-table {
+            width: 100%;
+            max-width: 1200px;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 1.2em;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 15px;
+            text-align: center;
+            border: 2px solid #bdc3c7;
+        }
+
+        .comparison-table th {
+            background: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #ecf0f1;
+        }
+
+        .portfolio-chart {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: conic-gradient(
+                #e74c3c 0% 30%,
+                #3498db 30% 60%,
+                #f39c12 60% 100%
+            );
+            margin: 20px auto;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .chart-label {
+            position: absolute;
+            font-weight: bold;
+            font-size: 1.1em;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+
+        .label-real-estate {
+            top: 20%;
+            left: 10%;
+        }
+
+        .label-stocks {
+            top: 20%;
+            right: 10%;
+        }
+
+        .label-crypto {
+            bottom: 30%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .icon {
+            font-size: 3em;
+            margin: 20px 0;
+        }
+
+        .final-slide {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+        }
+
+        .final-slide h1,
+        .final-slide h2 {
+            color: white;
+        }
+
+        .action-items {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            max-width: 600px;
+            margin: 30px 0;
+        }
+
+        .action-item {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* iframe 스타일링 */
+        .debt-clock-container {
+            width: 100%;
+            height: 800px;
+            margin: 20px 0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            background: white;
+            position: relative;
+        }
+
+        .debt-clock-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: white;
+        }
+
+        /* iframe 로딩 상태 */
+        .debt-clock-container::before {
+            content: "미국 부채 시계 로딩 중...";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #666;
+            font-size: 1.2em;
+            z-index: 1;
+        }
+
+        .debt-clock-container iframe:not([src=""])::before {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation">
+        <!-- 슬라이드 1: 표지 -->
+        <div class="slide active cover-slide">
+            <div class="slide-number">1 / 26</div>
+            <h1>왜 우리는 가난한 노년을 맞이하는가?</h1>
+            <h3>저축만으로는 부족한 시대의 투자 이야기</h3>
+            <p style="margin-top: 50px; font-size: 1.2em;">20대 청년을 위한 투자 교육</p>
+            <p style="font-size: 1em; color: #ecf0f1;">2025년 6월</p>
+        </div>
+
+        <!-- 슬라이드 2: 가난이란 무엇인가? -->
+        <div class="slide">
+            <div class="slide-number">2 / 26</div>
+            <h2>가난이란 무엇인가?</h2>
+            <div class="question">가난은 단순히 '돈이 없는 상태'일까요?</div>
+            <div style="font-size: 4em; margin: 30px 0;">🥶</div>
+            <ul>
+                <li><strong>선택할 수 없음</strong> - 원하는 것을 선택할 자유가 없음</li>
+                <li><strong>시간이 없음</strong> - 생계에만 매달려 미래를 생각할 여유가 없음</li>
+                <li><strong>여유가 없음</strong> - 예상치 못한 상황에 대처할 능력이 없음</li>
+            </ul>
+            <div class="insight">가난은 돈의 부족이 아니라 선택권(경제적)의 부족입니다.</div>
+        </div>
+
+        <!-- 슬라이드 3: 왜 우리는 노년에 가난할까? -->
+        <div class="slide">
+            <div class="slide-number">3 / 26</div>
+            <h2>왜 우리는 노년에 가난할까?</h2>
+            <div class="stat">60대 이후 빈곤율: 40.4% (OECD 1위)</div>
+            <div style="font-size: 4em; margin: 30px 0;">👴👵</div>
+            <ul>
+                <li><strong>준비 부족:</strong> 젊을 때의 안일한 생각, 그 때 가서 생각하자.</li>
+                <li><strong>저축 하면 돼:</strong> 돈의 가치가 하락한다는 사실을 모르고 저축하자.</li>
+                <li><strong>인플레이션:</strong> 물가는 오르는데 소득은 그대로</li>
+                <li><strong>부동산 신화:</strong> 한국에서는 부동산이 최고.</li>
+                <li><strong>기대 수명 증가:</strong> 90세까지 산다면 30년의 노후</li>
+            </ul>
+            <div class="question">30년 이상 살 노후, 준비되셨나요?</div>
+        </div>
+
+        <!-- 슬라이드 4: 불로소득은 죄일까? -->
+        <div class="slide">
+            <div class="slide-number">4 / 26</div>
+            <h2>불로소득은 죄일까?</h2>
+            <div class="question">일하지 않고 돈을 버는 건 나쁜 일일까요?</div>
+            <div style="font-size: 4em; margin: 30px 0;">💰</div>
+            <p><strong>우리 주변의 불로소득:</strong></p>
+            <ul>
+                <li>월세 수입 - 부동산 임대</li>
+                <li>배당금 - 주식 투자</li>
+                <li>연금 - 미래를 위한 준비</li>
+                <li>저작권료 - 창작물의 대가</li>
+            </ul>
+            <div class="insight">불로소득은 '게으름'이 아닌 '지혜'</div>
+            <div class="insight">자본주의 시대에는 자본가가 되어야 한다.</div>
+        </div>
+
+        <!-- 슬라이드 5: 부자에 대한 우리의 생각은? -->
+        <div class="slide">
+            <div class="slide-number">5 / 26</div>
+            <h2>부자에 대한 우리의 생각은?</h2>
+            <div class="question">부자는 나쁜 사람일까요?</div>
+            <div style="font-size: 4em; margin: 30px 0;">🤔</div>
+            <p><strong>일반적인 편견:</strong></p>
+            <ul>
+                <li>부자 = 탐욕스러운 사람?</li>
+                <li>부자 = 갑질하는 사람?</li>
+                <li>돈을 많이 벌면 = 누군가를 속인 것?</li>
+                <li>부자가 되려는 것 = 부도덕한 것?</li>
+            </ul>
+            <div class="insight">우리는 부자를 혐오하도록 학습되었습니다</div>
+            <div class="insight">하지만 부의 축적은 노력과 현명한 선택의 결과일 수 있습니다</div>
+        </div>
+
+        <!-- 슬라이드 6: 스스로 간절하게 부자가 되고 싶었던 적이 있는가? -->
+        <div class="slide">
+            <div class="slide-number">6 / 26</div>
+            <h2>스스로 간절하게 부자가 되고 싶었던 적이 있는가?</h2>
+            <div class="question">정말로 나는 돈을 원했을까요?</div>
+            <div style="font-size: 4em; margin: 30px 0;">💭</div>
+            <div class="insight">잠시 생각해보세요</div>
+            <p><strong>'내 인생에서 돈이 가장 절실했던 순간은 언제였나요?'</strong></p>
+            <ul>
+                <li>등록금이 부족했을 때?</li>
+                <li>가족이 아팠을 때?</li>
+                <li>꿈을 포기해야 했을 때?</li>
+            </ul>
+            <div class="insight">간절함 없는 목표는 행동을 낳지 않습니다</div>
+        </div>
+
+        <!-- 슬라이드 7: 화폐의 역사 -->
+        <div class="slide">
+            <div class="slide-number">7 / 26</div>
+            <h2>화폐의 역사</h2>
+            <div style="font-size: 6em; margin: 30px 0;">🐚➡️🥇➡️💵➡️💳</div>
+            <ul>
+                <li><strong>조개껍질 시대:</strong> 물물교환의 불편함 해결</li>
+                <li><strong>금 시대:</strong> 가치 저장의 수단</li>
+                <li><strong>지폐 시대:</strong> 국가가 보증하는 화폐</li>
+                <li><strong>디지털 시대:</strong> 비트코인과 디지털 화폐</li>
+            </ul>
+            <div class="insight">화폐는 계속 진화하고 있습니다</div>
+        </div>
+
+        <!-- 슬라이드 8: 유대인과 한국인의 돈 교육 차이 -->
+        <div class="slide">
+            <div class="slide-number">8 / 26</div>
+            <h2>유대인 vs 한국인의 금융(돈) 교육</h2>
+            <div style="font-size: 4em; margin: 30px 0;">🇮🇱 vs 🇰🇷</div>
+            <table class="comparison-table">
+                <tr>
+                    <th>구분</th>
+                    <th>한국인</th>
+                    <th>유대인</th>
+                </tr>
+                <tr>
+                    <td>돈에 대한 인식</td>
+                    <td>더럽고 위험한 것</td>
+                    <td>배워야 하는 기술</td>
+                </tr>
+                <tr>
+                    <td>투자 교육</td>
+                    <td>성인이 되어서도 기피</td>
+                    <td>어릴 때부터 시작</td>
+                </tr>
+                <tr>
+                    <td>교육 목표</td>
+                    <td>공부 잘 해라.</td>
+                    <td>부자가 되어라.</td>
+                </tr>
+                <tr>
+                    <td>받아들이는 사람의 입장</td>
+                    <td>뭘 잘 해야 공부를 잘 하는 거지?</td>
+                    <td>100억이면 될까? 1000억, 1조, 10조?</td>
+                </tr>
+                <tr>
+                    <td>사회 기준 가능성. (1000명 기준) </td>
+                    <td>1등은 한명</td>
+                    <td>어떤 분야든 1등을 하면 부자가 된다.</td>
+                </tr>
+                <tr>
+                    <td>결과</td>
+                    <td>OECD 노인빈곤율 1위</td>
+                    <td>노벨경제학상 42%</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- 슬라이드 9: 인플레이션이란? -->
+        <div class="slide">
+            <div class="slide-number">9 / 26</div>
+            <h2>인플레이션이란?</h2>
+            <div class="question">은마아파트의 가격은?</div>
+            <div style="font-size: 4em; margin: 30px 0;">🏠📈</div>
+            <p><strong>은마아파트 가격 변화:</strong></p>
+            <ul>
+                <li>1988년: 5천만원</li>
+                <li>2025년: 40억원</li>
+                <li>37년 만에 <strong>80배</strong> 상승!</li>
+            </ul>
+            <div class="stat">짐바브웨: 빵 하나에 1억 달러가 필요한 나라</div>
+            <div class="insight">돈의 가치는 시간이 지날수록 줄어듭니다</div>
+        </div>
+
+        <!-- 슬라이드 10: 미국 부채 시계 -->
+        <div class="slide">
+            <div class="slide-number">10 / 26</div>
+            <h2>미국 부채 시계 실시간 현황</h2>
+            <div class="question">세계 최대 경제국의 부채는 얼마나 될까요?</div>
+            <!-- 미국 부채 시계 iframe -->
+            <div class="debt-clock-container">
+                <iframe 
+                    src="https://www.usdebtclock.org/" 
+                    width="100%" 
+                    height="100%" 
+                    frameborder="0" 
+                    scrolling="no"
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+
+        <!-- 슬라이드 11: 인플레이션을 극복하는 유일한 길 -->
+        <div class="slide">
+            <div class="slide-number">11 / 26</div>
+            <h2>인플레이션을 극복하는 유일한 길</h2>
+            <div class="question">물가가 오르면 나의 저축은 어떻게 될까요?</div>
+            <div style="font-size: 4em; margin: 30px 0;">💸📉</div>
+            <p><strong>저축 1억원의 실제 가치:</strong></p>
+            <ul>
+                <li>연 3% 인플레이션 가정</li>
+                <li>10년 후: 약 7,400만원의 구매력</li>
+                <li>20년 후: 약 5,500만원의 구매력</li>
+                <li>30년 후: 약 4,100만원의 구매력</li>
+            </ul>
+            <div class="insight">자산을 늘려야 생존이 가능합니다</div>
+        </div>
+
+        <!-- 슬라이드 12: 투자 시뮬레이션 -->
+        <div class="slide">
+            <div class="slide-number">12 / 26</div>
+            <h2>투자 시뮬레이션 체험</h2>
+            
+            <div style="width: 100%; background: #f8f9fa; padding: 30px; border-radius: 15px; text-align: left; margin-top: 20px;">
+                <h3 style="text-align: center; margin-bottom: 20px;">적립식 투자 시뮬레이션</h3>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                    <div>
+                        <label style="display: block; margin-bottom: 5px; font-weight: bold;">초기 투자 금액:</label>
+                        <input type="text" id="simInitial" value="20,000,000" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px;" oninput="formatNumber(this)">
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 5px; font-weight: bold;">월 적립액 (원):</label>
+                        <input type="text" id="simMonthly" value="300,000" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px;" oninput="formatNumber(this)">
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 5px; font-weight: bold;">연간 투자 수익율 (%):</label>
+                        <input type="number" id="simRate" value="5" step="0.1" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 5px; font-weight: bold;">배당율 (%):</label>
+                        <input type="number" id="simDividend" value="2" step="0.1" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                    <div>
+                        <label style="display: block; margin-bottom: 5px; font-weight: bold;">적립 기간 (년):</label>
+                        <input type="number" id="simInvestPeriod" value="30" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 5px; font-weight: bold;">투자 기간 (년):</label>
+                        <input type="number" id="simTotalPeriod" value="30" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
+                    </div>
+                    <div style="display: flex; align-items: end;">
+                        <button onclick="event.stopPropagation(); runDetailedSimulation();" style="width: 100%; padding: 12px; background: linear-gradient(45deg, #4CAF50, #45a049); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer;">Simulation</button>
+                    </div>
+                </div>
+                
+                <div id="detailedResult" style="background: white; padding: 15px; border-radius: 10px; border: 2px solid #e9ecef; margin-bottom: 20px;">
+                    <p style="text-align: center; color: #6c757d; margin: 0;">위 버튼을 클릭하여 투자 결과를 확인해보세요!</p>
+                </div>
+                
+                <div style="width: 100%; height: 450px; background: white; border-radius: 10px; border: 2px solid #e9ecef; padding: 10px;">
+                    <canvas id="simulationChart" style="width: 100%; height: 100%;"></canvas>
+                </div>
+            </div>
+            
+            <div class="insight" style="margin-top: 20px;">복리의 마법을 직접 체험해보세요!</div>
+        </div>
+
+        <!-- 슬라이드 13: 상상력이 투자를 만든다 -->
+        <div class="slide">
+            <div class="slide-number">13 / 26</div>
+            <h2>상상력이 투자를 만든다</h2>
+            <div class="question">"10년 뒤 세상은 어떻게 바뀔까요?"</div>
+            <div style="font-size: 4em; margin: 30px 0;">🔮✨</div>
+            <p><strong>미래를 바꿀 기술들:</strong></p>
+            <ul>
+                <li><strong>전기차:</strong> 테슬라 주가 10년간 20배 상승</li>
+                <li><strong>AI:</strong> 엔비디아 주가 5년간 30배 상승</li>
+                <li><strong>메타버스:</strong> 새로운 디지털 세상</li>
+                <li><strong>로봇:</strong> 인간의 일을 대체할까?</li>
+            </ul>
+            <div class="insight">미래를 상상하고 그에 투자하는 것이 핵심입니다</div>
+        </div>
+
+        <!-- 슬라이드 14: 분할 매수의 중요성 -->
+        <div class="slide">
+            <div class="slide-number">14 / 26</div>
+            <h2>분할 매수의 중요성</h2>
+            <div class="question">한 번에 모든 돈을 투자할까요, 아니면 나누어서 투자할까요?</div>
+            <div style="width: 100%; background: #f8f9fa; padding: 30px; border-radius: 15px; text-align: left; margin-top: 20px;">
+                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 30px;">
+                    <!-- 좌측 패널: 입력 조건 및 가이드 -->
+                    <div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                        <h4 style="margin: 0 0 20px 0; color: #2c3e50; font-size: 1.3em; display: flex; align-items: center;">
+                            <span style="margin-right: 8px;">🧮</span>시뮬레이션 조건
+                        </h4>
+                        
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; margin-bottom: 8px; font-weight: bold; color: #34495e;">💰 총 투자금 (원)</label>
+                            <input type="text" id="dcaTotalInvestment" value="12,000,000" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 14px;" oninput="formatNumber(this)">
+                        </div>
+                        
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; margin-bottom: 8px; font-weight: bold; color: #34495e;">📊 초기 주가 (원)</label>
+                            <input type="text" id="dcaInitialPrice" value="10,000" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 14px;" oninput="formatNumber(this)">
+                        </div>
+                        
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; margin-bottom: 8px; font-weight: bold; color: #34495e;">📈 월별 변동액 (원)</label>
+                            <input type="text" id="dcaMonthlyChange" value="1,000" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 14px;" oninput="formatNumber(this)">
+                        </div>
+                        
+                        <button onclick="event.stopPropagation(); runDCASimulation();" style="width: 100%; padding: 15px; background: linear-gradient(45deg, #3498db, #2980b9); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);">
+                            🚀 시뮬레이션 실행
+                        </button>
+                        
+                        <div style="background: #e8f4fd; border: 1px solid #b3d9ff; border-radius: 10px; padding: 20px;">
+                            <h5 style="margin: 0 0 15px 0; color: #2980b9; font-size: 1.1em;">💡 시뮬레이션 가이드</h5>
+                            <ul style="margin: 0; padding-left: 20px; color: #2c3e50; font-size: 14px; line-height: 1.6;">
+                                <li style="margin-bottom: 8px;"><strong>총 투자금:</strong> 12개월간 분할 투자 또는 일시불 투자</li>
+                                <li style="margin-bottom: 8px;"><strong>월별 변동액:</strong> 주가의 월별 변동폭</li>
+                                <li style="margin-bottom: 8px;"><strong>그래프:</strong> 월별 주가, 보유 주식, 수익률, 자산가치 순서로 표시</li>
+                            </ul>
+                        </div>
+
+                        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 12px; margin-top: 20px;">
+                            <h4 style="margin: 0 0 15px 0; font-size: 1.1em;">💡 분할 매수의 장점</h4>
+                            <ul style="margin: 0; padding-left: 20px; line-height: 1.6;">
+                                <li style="margin-bottom: 8px;">시장 변동성에 대응하여 리스크를 분산할 수 있습니다.</li>
+                                <li style="margin-bottom: 8px;">심리적 부담을 줄이고, 꾸준한 투자 습관을 기를 수 있습니다.</li>
+                                <li style="margin-bottom: 8px;">장기적으로 평균 매입 단가를 낮출 수 있습니다.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- 우측 패널: 결과 및 차트 -->
+                    <div style="display: flex; flex-direction: column; gap: 20px;">
+                        <!-- 결과 요약 카드들 -->
+                        <div id="dcaResult" style="background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                            <p style="text-align: center; color: #6c757d; margin: 0; font-size: 1.1em;">위 버튼을 클릭하여 분할매수와 일시불 투자의 차이를 확인해보세요!</p>
+                        </div>
+                        
+                        <!-- 차트 영역 -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <!-- 월별 주가 변화 -->
+                            <div style="background: white; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); overflow: hidden;">
+                                <div style="padding: 15px; border-bottom: 1px solid #eee;">
+                                    <h5 style="margin: 0; color: #2c3e50; font-size: 1.1em;">월별 주가 변화</h5>
+                                </div>
+                                <div style="height: 250px; padding: 15px;">
+                                    <canvas id="dcaPriceChart" style="width: 100%; height: 100%;"></canvas>
+                                </div>
+                            </div>
+                            
+                            <!-- 보유 주식 수 변화 -->
+                            <div style="background: white; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); overflow: hidden;">
+                                <div style="padding: 15px; border-bottom: 1px solid #eee;">
+                                    <h5 style="margin: 0; color: #2c3e50; font-size: 1.1em;">보유 주식 수 변화</h5>
+                                </div>
+                                <div style="height: 250px; padding: 15px;">
+                                    <canvas id="dcaSharesChart" style="width: 100%; height: 100%;"></canvas>
+                                </div>
+                            </div>
+                            
+                            <!-- 수익률 변화 -->
+                            <div style="background: white; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); overflow: hidden;">
+                                <div style="padding: 15px; border-bottom: 1px solid #eee;">
+                                    <h5 style="margin: 0; color: #2c3e50; font-size: 1.1em;">수익률 변화</h5>
+                                </div>
+                                <div style="height: 250px; padding: 15px;">
+                                    <canvas id="dcaReturnChart" style="width: 100%; height: 100%;"></canvas>
+                                </div>
+                            </div>
+                            
+                            <!-- 자산 가치 변화 -->
+                            <div style="background: white; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); overflow: hidden;">
+                                <div style="padding: 15px; border-bottom: 1px solid #eee;">
+                                    <h5 style="margin: 0; color: #2c3e50; font-size: 1.1em;">자산 가치 변화</h5>
+                                </div>
+                                <div style="height: 250px; padding: 15px;">
+                                    <canvas id="dcaValueChart" style="width: 100%; height: 100%;"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 슬라이드 14: 여유 자금으로 투자한다 -->
+        <div class="slide">
+            <div class="slide-number">14 / 26</div>
+            <h2>여유 자금으로 투자한다</h2>
+            <div style="font-size: 4em; margin: 30px 0;">⚖️💰</div>
+            <p><strong>투자의 기본 원칙:</strong></p>
+            <ul>
+                <li><strong>'올인'이 아닌 '분산'</strong> - 모든 돈을 한 곳에 투자하지 말 것</li>
+                <li><strong>생활비는 건드리지 말 것</strong> - 최소 6개월 생활비는 별도 보관</li>
+                <li><strong>장기적 관점</strong> - 단기 수익에 연연하지 말 것</li>
+                <li><strong>학습과 경험</strong> - 실수에서 배우는 것도 투자</li>
+            </ul>
+            <div class="insight">잃어도 괜찮은 돈으로 시작하세요</div>
+        </div>
+
+        <!-- 슬라이드 15: 비트코인의 개요 -->
+        <div class="slide">
+            <div class="slide-number">15 / 26</div>
+            <h2>비트코인이란 무엇인가?</h2>
+            <div style="font-size: 4em; margin: 30px 0;">₿</div>
+            <p><strong>비트코인의 특징:</strong></p>
+            <ul>
+                <li><strong>중앙은행이 없는</strong> 디지털 자산</li>
+                <li><strong>블록체인</strong> 기술로 거래 기록</li>
+                <li><strong>총 발행량 제한:</strong> 2,100만 개</li>
+                <li><strong>전 세계</strong> 어디서나 24시간 거래</li>
+            </ul>
+            <div class="question">왜 젊은 세대가 비트코인에 열광할까요?</div>
+            <div class="insight">새로운 화폐 시스템에 대한 기대와 불신</div>
+        </div>
+
+        <!-- 슬라이드 16: 달러 vs 코인 vs 해외송금 비교 -->
+        <div class="slide">
+            <div class="slide-number">16 / 26</div>
+            <h2>송금 수단 비교</h2>
+            <table class="comparison-table">
+                <tr>
+                    <th>구분</th>
+                    <th>은행 송금</th>
+                    <th>비트코인</th>
+                </tr>
+                <tr>
+                    <td>송금 시간</td>
+                    <td>1-3일</td>
+                    <td>10분-1시간</td>
+                </tr>
+                <tr>
+                    <td>수수료</td>
+                    <td>3-5%</td>
+                    <td>$1-10</td>
+                </tr>
+                <tr>
+                    <td>한도</td>
+                    <td>제한 있음</td>
+                    <td>무제한</td>
+                </tr>
+                <tr>
+                    <td>리스크</td>
+                    <td>낮음</td>
+                    <td>변동성 높음</td>
+                </tr>
+            </table>
+            <div class="question">미래의 화폐는 누가 통제할까요?</div>
+        </div>
+
+        <!-- 슬라이드 17: 금, 법정화폐, 비트코인 비교 -->
+        <div class="slide">
+            <div class="slide-number">17 / 26</div>
+            <h2>금, 법정화폐, 비트코인 비교</h2>
+            <div style="width: 100%; background: #f8f9fa; padding: 30px; border-radius: 15px; text-align: left; margin-top: 20px;">
+                <p style="text-align: center; margin-bottom: 30px; color: #666; font-size: 1.1em;">각 화폐의 8가지 속성을 1-5점 척도로 비교해보세요!</p>
+                
+                <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+                    <div style="background: white; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 20px; width: 100%; max-width: 1500px;">
+                        <canvas id="radarChart" style="width: 100%; height: 1200px;"></canvas>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-top: 20px;">
+                    <div style="background: linear-gradient(135deg, #ffd700, #ffed4e); padding: 20px; border-radius: 12px; color: #333;">
+                        <h4 style="margin: 0 0 15px 0; text-align: center;">🥇 금 (Gold)</h4>
+                        <ul style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.6;">
+                            <li><strong>교환 매개체:</strong> 3점 - 무거워서 불편</li>
+                            <li><strong>가치 저장:</strong> 5점 - 오랜 역사의 가치</li>
+                            <li><strong>가치 척도:</strong> 2점 - 변동성 있음</li>
+                            <li><strong>희소성:</strong> 5점 - 한정된 양</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: linear-gradient(135deg, #3498db, #5dade2); padding: 20px; border-radius: 12px; color: white;">
+                        <h4 style="margin: 0 0 15px 0; text-align: center;">💵 법정화폐 (Fiat)</h4>
+                        <ul style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.6;">
+                            <li><strong>교환 매개체:</strong> 5점 - 가장 편리</li>
+                            <li><strong>가치 저장:</strong> 3점 - 인플레이션</li>
+                            <li><strong>가치 척도:</strong> 5점 - 안정적</li>
+                            <li><strong>희소성:</strong> 2점 - 무제한 발행</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: linear-gradient(135deg, #27ae60, #58d68d); padding: 20px; border-radius: 12px; color: white;">
+                        <h4 style="margin: 0 0 15px 0; text-align: center;">₿ 비트코인 (Bitcoin)</h4>
+                        <ul style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.6;">
+                            <li><strong>교환 매개체:</strong> 4점 - 디지털 편리함</li>
+                            <li><strong>가치 저장:</strong> 5점 - 디지털 금</li>
+                            <li><strong>가치 척도:</strong> 4점 - 변동성 있음</li>
+                            <li><strong>희소성:</strong> 5점 - 2100만개 한정</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 슬라이드 18: 포트폴리오 개념 -->
+        <div class="slide">
+            <div class="slide-number">18 / 26</div>
+            <h2>포트폴리오란 무엇인가?</h2>
+            <div class="question">모든 달걀을 한 바구니에 담을까요?</div>
+            <div style="font-size: 4em; margin: 30px 0;">🥚🧺</div>
+            <p><strong>포트폴리오의 중요성:</strong></p>
+            <ul>
+                <li><strong>위험 분산:</strong> 한 자산이 하락해도 다른 자산으로 커버</li>
+                <li><strong>안정적 수익:</strong> 변동성을 줄이면서 꾸준한 성장</li>
+                <li><strong>기회 확대:</strong> 다양한 시장의 기회를 잡을 수 있음</li>
+            </ul>
+            <div class="insight">분산투자는 투자의 기본 원칙입니다</div>
+        </div>
+
+        <!-- 슬라이드 19: 예시 포트폴리오 구성 -->
+        <div class="slide">
+            <div class="slide-number">19 / 26</div>
+            <h2>20대 포트폴리오 예시</h2>
+            <div class="portfolio-chart">
+                <div class="chart-label label-real-estate">부동산<br>30%</div>
+                <div class="chart-label label-stocks">주식<br>30%</div>
+                <div class="chart-label label-crypto">암호화폐<br>40%</div>
+            </div>
+            <ul>
+                <li><strong>부동산 30%:</strong> 안정적인 자산 (REITs 포함)</li>
+                <li><strong>주식 30%:</strong> 성장 가능성 (국내외 우량주)</li>
+                <li><strong>암호화폐 40%:</strong> 고위험 고수익 (젊을 때만 가능)</li>
+            </ul>
+            <div class="insight">나이와 위험감수능력에 따라 비율을 조정하세요</div>
+        </div>
+
+        <!-- 슬라이드 20: 분산 투자 설명 -->
+        <div class="slide">
+            <div class="slide-number">20 / 26</div>
+            <h2>분산 투자의 3가지 축</h2>
+            <div style="font-size: 4em; margin: 30px 0;">⏰🌍🏭</div>
+            <ul>
+                <li><strong>시간 분산:</strong> 적립식 투자로 평균 단가 낮추기</li>
+                <li><strong>지역 분산:</strong> 미국, 한국, 중국, 유럽 등</li>
+                <li><strong>업종 분산:</strong> 기술, 헬스케어, 금융, 인프라 등</li>
+            </ul>
+            <div class="insight">한 번에 많이 사기보다는 꾸준히 나누어 사세요</div>
+            <p>매월 100만원씩 3개 종목에 33만원씩 투자하는 것도 좋은 방법입니다</p>
+        </div>
+
+        <!-- 슬라이드 21: 미국 주식 vs 한국 주식 -->
+        <div class="slide">
+            <div class="slide-number">21 / 26</div>
+            <h2>미국 주식 vs 한국 주식</h2>
+            <table class="comparison-table">
+                <tr>
+                    <th>구분</th>
+                    <th>미국 주식</th>
+                    <th>한국 주식</th>
+                </tr>
+                <tr>
+                    <td>시장 규모</td>
+                    <td>세계 최대</td>
+                    <td>상대적으로 작음</td>
+                </tr>
+                <tr>
+                    <td>성장성</td>
+                    <td>글로벌 기업들</td>
+                    <td>국내 중심</td>
+                </tr>
+                <tr>
+                    <td>배당</td>
+                    <td>분기별 지급</td>
+                    <td>연 1회</td>
+                </tr>
+                <tr>
+                    <td>환율 리스크</td>
+                    <td>있음</td>
+                    <td>없음</td>
+                </tr>
+            </table>
+            <div class="question">내 자산을 어디에 맡길 것인가?</div>
+        </div>
+
+        <!-- 슬라이드 22: 어떤 주식을 살 것인가? -->
+        <div class="slide">
+            <div class="slide-number">22 / 26</div>
+            <h2>어떤 주식을 살 것인가?</h2>
+            <div style="font-size: 4em; margin: 30px 0;">🤝💼</div>
+            <p><strong>주식 선택의 기준:</strong></p>
+            <ul>
+                <li><strong>10년 후 세계 1등 할 기업</strong> - 이제 독점의 시대, 1등하는 업체가 세계를 지배한다.</li>
+                <li><strong>10년 후 세계 1등 할 기업</strong> - 이제 독점의 시대, 1등하는 업체가 세계를 지배한다.</li>
+                <li><strong>나를 대신 일할 기업</strong> - 내가 잠들어 있을 때도 돈을 벌어주는 회사</li>
+                <li><strong>내가 쓰는 브랜드</strong> - 애플, 구글, 테슬라, 삼성 등</li>
+                <li><strong>미래 성장 가능성</strong> - 10년 후에도 필요한 기업일까?</li>
+                <li><strong>안정적인 수익</strong> - 꾸준히 배당을 주는 기업</li>
+            </ul>
+            <div class="insight">내가 이해할 수 있는 기업에 투자하세요</div>
+        </div>
+
+        <!-- 슬라이드 23: 현금 흐름이란 무엇인가? -->
+        <div class="slide">
+            <div class="slide-number">23 / 26</div>
+            <h2>현금 흐름이란 무엇인가?</h2>
+            <div style="font-size: 4em; margin: 30px 0;">💰➡️💰</div>
+            <p><strong>현금 흐름의 개념:</strong></p>
+            <ul>
+                <li><strong>들어오는 돈:</strong> 월급, 배당금, 월세, 부업 수입</li>
+                <li><strong>나가는 돈:</strong> 생활비, 세금, 대출 이자</li>
+                <li><strong>목표:</strong> 들어오는 돈 > 나가는 돈</li>
+            </ul>
+            <div class="question">내 월급 외의 수입은 얼마나 될까요?</div>
+            <div class="insight">월급 외의 수입을 만드는 것이 진정한 투자입니다</div>
+        </div>
+
+        <!-- 슬라이드 24: 세상의 이치를 다 아는데 왜 가난할까? -->
+        <div class="slide">
+            <div class="slide-number">24 / 26</div>
+            <h2>알면서도 왜 가난할까?</h2>
+            <div style="font-size: 4em; margin: 30px 0;">🤷‍♂️📚</div>
+            <p><strong>아는 것과 하는 것의 차이:</strong></p>
+            <ul>
+                <li><strong>걱정만 하기:</strong> "투자는 위험해", "지금은 때가 아니야"</li>
+                <li><strong>완벽 추구:</strong> "더 공부하고 나서", "확실해지면"</li>
+                <li><strong>행동 회피:</strong> 분석은 많이 하지만 실행은 안 함</li>
+            </ul>
+            <div class="question">나는 얼마나 움직이고 있는가?</div>
+            <div class="insight">'걱정'은 지식을 만들지만, '행동'은 결과를 만듭니다</div>
+        </div>
+
+        <!-- 슬라이드 25: 돈의 우선순위를 정하자 -->
+        <div class="slide">
+            <div class="slide-number">25 / 26</div>
+            <h2>돈의 우선순위를 정하자</h2>
+            <div style="font-size: 4em; margin: 30px 0;">🎯💸</div>
+            <table class="comparison-table">
+                <tr>
+                    <th>순위</th>
+                    <th>항목</th>
+                    <th>비율</th>
+                    <th>목적</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>생활비</td>
+                    <td>50%</td>
+                    <td>생존</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>저축</td>
+                    <td>10%</td>
+                    <td>안전</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>투자</td>
+                    <td>35%</td>
+                    <td>성장</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>기부</td>
+                    <td>5%</td>
+                    <td>가치</td>
+                </tr>
+            </table>
+            <div class="question">내 소비 성향은 어디에 가까울까?</div>
+        </div>
+
+        <!-- 슬라이드 26: 마무리 -->
+        <div class="slide final-slide">
+            <div class="slide-number">26 / 26</div>
+            <h1>어떻게 살 것인가?</h1>
+            <div style="font-size: 4em; margin: 30px 0;">💪📚💰</div>
+            <div class="action-items">
+                <div class="action-item">
+                    <div style="font-size: 2em; margin-bottom: 10px;">💪</div>
+                    <h3>운동</h3>
+                    <p>건강한 몸</p>
+                </div>
+                <div class="action-item">
+                    <div style="font-size: 2em; margin-bottom: 10px;">📚</div>
+                    <h3>독서</h3>
+                    <p>성장하는 마음</p>
+                </div>
+                <div class="action-item">
+                    <div style="font-size: 2em; margin-bottom: 10px;">💰</div>
+                    <h3>투자</h3>
+                    <p>늘어가는 자산</p>
+                </div>
+            </div>
+            <div class="insight">몸과 돈, 모두를 돌보는 삶</div>
+            <div class="question">나는 지금 어떤 삶을 선택할 것인가?</div>
+            <p style="margin-top: 40px; font-size: 1.2em;">오늘부터 시작하세요. 작은 행동이 큰 변화를 만듭니다.</p>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" onclick="previousSlide()">이전</button>
+        <button class="nav-btn" onclick="nextSlide()">다음</button>
+        <button class="nav-btn" onclick="goToSlide(1)">처음으로</button>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 26;
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            if (n > totalSlides) currentSlide = 1;
+            if (n < 1) currentSlide = totalSlides;
+            
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[currentSlide - 1].classList.add('active');
+        }
+
+        function nextSlide() {
+            currentSlide++;
+            showSlide(currentSlide);
+        }
+
+        function previousSlide() {
+            currentSlide--;
+            showSlide(currentSlide);
+        }
+
+        function goToSlide(n) {
+            currentSlide = n;
+            showSlide(currentSlide);
+        }
+
+        // 투자 시뮬레이션 계산 함수
+        function calculateInvestment() {
+            const initial = parseFloat(document.getElementById('simInitial').value) || 0;
+            const monthly = parseFloat(document.getElementById('simMonthly').value) || 0;
+            const rate = parseFloat(document.getElementById('simRate').value) || 0;
+            const years = parseInt(document.getElementById('simYears').value) || 0;
+            
+            if (initial < 0 || monthly < 0 || rate < 0 || years <= 0) {
+                document.getElementById('investmentResult').innerHTML = '<p style="color: red; text-align: center; margin: 0;">올바른 값을 입력해주세요.</p>';
+                return;
+            }
+            
+            const monthlyRate = rate / 100 / 12;
+            const months = years * 12;
+            let balance = initial;
+            
+            for (let i = 0; i < months; i++) {
+                balance = (balance + monthly) * (1 + monthlyRate);
+            }
+            
+            const totalInvested = initial + (monthly * months);
+            const profit = balance - totalInvested;
+            const profitRate = ((balance / totalInvested - 1) * 100);
+            
+            document.getElementById('investmentResult').innerHTML = `
+                <div style="text-align: center;">
+                    <h4 style="margin: 0 0 10px 0; color: #2c3e50;">📈 투자 결과</h4>
+                    <p style="margin: 5px 0; font-size: 1.1em;"><strong>총 투자금액:</strong> ${totalInvested.toLocaleString()}원</p>
+                    <p style="margin: 5px 0; font-size: 1.1em;"><strong>최종 자산:</strong> <span style="color: #e74c3c; font-weight: bold;">${Math.round(balance).toLocaleString()}원</span></p>
+                    <p style="margin: 5px 0; font-size: 1.1em;"><strong>수익금:</strong> <span style="color: #27ae60; font-weight: bold;">${Math.round(profit).toLocaleString()}원</span></p>
+                    <p style="margin: 5px 0; font-size: 1.1em;"><strong>수익률:</strong> <span style="color: #f39c12; font-weight: bold;">${profitRate.toFixed(1)}%</span></p>
+                </div>
+            `;
+        }
+
+        // 숫자 포맷팅 함수 (콤마 추가)
+        function formatNumber(input) {
+            let value = input.value.replace(/,/g, '');
+            if (!isNaN(value) && value !== '') {
+                input.value = parseInt(value).toLocaleString();
+            }
+        }
+
+        // 포맷된 숫자를 실제 숫자로 변환하는 함수
+        function parseFormattedNumber(value) {
+            return parseFloat(value.replace(/,/g, '')) || 0;
+        }
+
+        // 상세 투자 시뮬레이션 계산 함수 (간단한 차트 포함)
+        function runDetailedSimulation() {
+            const initialInvestment = parseFormattedNumber(document.getElementById('simInitial').value);
+            const monthlyInvestment = parseFormattedNumber(document.getElementById('simMonthly').value);
+            const annualInterest = parseFloat(document.getElementById('simRate').value) || 0;
+            const dividendRate = parseFloat(document.getElementById('simDividend').value) || 0;
+            const investPeriod = parseInt(document.getElementById('simInvestPeriod').value) || 0;
+            const totalPeriod = parseInt(document.getElementById('simTotalPeriod').value) || 0;
+            
+            if (initialInvestment < 0 || monthlyInvestment < 0 || annualInterest < 0 || dividendRate < 0 || investPeriod <= 0 || totalPeriod <= 0) {
+                document.getElementById('detailedResult').innerHTML = '<p style="color: red; text-align: center; margin: 0;">올바른 값을 입력해주세요.</p>';
+                return;
+            }
+            
+            const monthlyRate = (annualInterest + dividendRate) / 100 / 12;
+            const investMonths = investPeriod * 12;
+            const totalMonths = totalPeriod * 12;
+            
+            let balance = initialInvestment;
+            let totalInv = initialInvestment;
+            const balances = [balance];
+            const totalInvestments = [totalInv];
+            const labels = ['Year 0'];
+            
+            // 적립 기간
+            for (let i = 1; i <= investMonths; i++) {
+                totalInv += monthlyInvestment;
+                balance = (balance + monthlyInvestment) * (1 + monthlyRate);
+                
+                if (i % 12 === 0) {
+                    balances.push(balance);
+                    totalInvestments.push(totalInv);
+                    labels.push(`Year ${i / 12}`);
+                }
+            }
+            
+            // 투자만 유지하는 기간
+            for (let i = 1; i <= totalMonths; i++) {
+                balance = balance * (1 + monthlyRate);
+                
+                if (i % 12 === 0) {
+                    balances.push(balance);
+                    totalInvestments.push(totalInv);
+                    labels.push(`Year ${investPeriod + (i / 12)}`);
+                }
+            }
+            
+            const finalAmount = balances[balances.length - 1];
+            const totalInvested = totalInvestments[totalInvestments.length - 1];
+            const profit = finalAmount - totalInvested;
+            
+            document.getElementById('detailedResult').innerHTML = `
+                <div style="text-align: center;">
+                    <h4 style="margin: 0 0 10px 0; color: #2c3e50;">시뮬레이션 결과</h4>
+                    <p style="margin: 5px 0; font-size: 1.1em;"><strong>총 적립 금액:</strong> ${Math.round(totalInvested).toLocaleString()}원</p>
+                    <p style="margin: 5px 0; font-size: 1.1em;"><strong>최종 금액:</strong> <span style="color: #e74c3c; font-weight: bold;">${Math.round(finalAmount).toLocaleString()}원</span></p>
+                    <p style="margin: 5px 0; font-size: 1.1em;"><strong>수익금액:</strong> <span style="color: #27ae60; font-weight: bold;">${Math.round(profit).toLocaleString()}원</span></p>
+                </div>
+            `;
+            
+            // 간단한 Canvas 차트 그리기
+            drawSimpleChart(labels, balances, totalInvestments);
+        }
+        
+        function drawSimpleChart(labels, balances, totalInvestments) {
+            const canvas = document.getElementById('simulationChart');
+            const ctx = canvas.getContext('2d');
+            
+            // 캔버스 크기 설정
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            const width = canvas.width;
+            const height = canvas.height;
+            const padding = 60;
+            
+            // 배경 지우기
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, width, height);
+            
+            // 데이터 범위 계산
+            const maxValue = Math.max(...balances);
+            const minValue = 0;
+            const maxIndex = labels.length - 1;
+            
+            // 좌표 변환 함수
+            const getX = (index) => padding + (index / maxIndex) * (width - padding * 2);
+            const getY = (value) => height - padding - ((value - minValue) / (maxValue - minValue)) * (height - padding * 2);
+            
+            // 그리드 그리기
+            ctx.strokeStyle = '#e0e0e0';
+            ctx.lineWidth = 1;
+            
+            // 세로 그리드 (년도)
+            for (let i = 0; i < labels.length; i += 5) {
+                const x = getX(i);
+                ctx.beginPath();
+                ctx.moveTo(x, padding);
+                ctx.lineTo(x, height - padding);
+                ctx.stroke();
+            }
+            
+            // 가로 그리드 (금액)
+            for (let i = 0; i <= 5; i++) {
+                const value = minValue + (maxValue - minValue) * (i / 5);
+                const y = getY(value);
+                ctx.beginPath();
+                ctx.moveTo(padding, y);
+                ctx.lineTo(width - padding, y);
+                ctx.stroke();
+            }
+            
+            // 투자 금액 선 그리기 (청록색)
+            ctx.strokeStyle = 'rgba(75, 192, 192, 1)';
+            ctx.fillStyle = 'rgba(75, 192, 192, 0.2)';
+            ctx.lineWidth = 3;
+            
+            // 영역 채우기
+            ctx.beginPath();
+            ctx.moveTo(getX(0), getY(0));
+            for (let i = 0; i < balances.length; i++) {
+                ctx.lineTo(getX(i), getY(balances[i]));
+            }
+            ctx.lineTo(getX(balances.length - 1), getY(0));
+            ctx.closePath();
+            ctx.fill();
+            
+            // 선 그리기
+            ctx.beginPath();
+            ctx.moveTo(getX(0), getY(balances[0]));
+            for (let i = 1; i < balances.length; i++) {
+                ctx.lineTo(getX(i), getY(balances[i]));
+            }
+            ctx.stroke();
+            
+            // 입금액 선 그리기 (빨간색)
+            ctx.strokeStyle = 'rgba(255, 99, 132, 1)';
+            ctx.fillStyle = 'rgba(255, 99, 132, 0.2)';
+            ctx.lineWidth = 3;
+            
+            // 영역 채우기
+            ctx.beginPath();
+            ctx.moveTo(getX(0), getY(0));
+            for (let i = 0; i < totalInvestments.length; i++) {
+                ctx.lineTo(getX(i), getY(totalInvestments[i]));
+            }
+            ctx.lineTo(getX(totalInvestments.length - 1), getY(0));
+            ctx.closePath();
+            ctx.fill();
+            
+            // 선 그리기
+            ctx.beginPath();
+            ctx.moveTo(getX(0), getY(totalInvestments[0]));
+            for (let i = 1; i < totalInvestments.length; i++) {
+                ctx.lineTo(getX(i), getY(totalInvestments[i]));
+            }
+            ctx.stroke();
+            
+            // 축 레이블 그리기
+            ctx.fillStyle = '#333';
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'center';
+            
+            // X축 레이블 (년도)
+            for (let i = 0; i < labels.length; i += 5) {
+                const x = getX(i);
+                ctx.fillText(labels[i], x, height - 20);
+            }
+            
+            // Y축 레이블 (금액)
+            ctx.textAlign = 'right';
+            for (let i = 0; i <= 5; i++) {
+                const value = minValue + (maxValue - minValue) * (i / 5);
+                const y = getY(value);
+                const text = value >= 1000000000 ? (value / 1000000000).toFixed(1) + '십억' :
+                            value >= 100000000 ? (value / 100000000).toFixed(1) + '억' :
+                            value >= 10000000 ? (value / 10000000).toFixed(1) + '천만' :
+                            (value / 1000000).toFixed(1) + '백만';
+                ctx.fillText(text, padding - 10, y + 4);
+            }
+            
+            // 범례 그리기
+            ctx.textAlign = 'left';
+            ctx.font = '14px Arial';
+            
+            // 투자 금액 범례
+            ctx.fillStyle = 'rgba(75, 192, 192, 1)';
+            ctx.fillRect(width - 150, 30, 15, 15);
+            ctx.fillStyle = '#333';
+            ctx.fillText('투자 금액', width - 130, 42);
+            
+            // 입금액 범례
+            ctx.fillStyle = 'rgba(255, 99, 132, 1)';
+            ctx.fillRect(width - 150, 55, 15, 15);
+            ctx.fillStyle = '#333';
+            ctx.fillText('입금액', width - 130, 67);
+            
+            // 제목
+            ctx.textAlign = 'center';
+            ctx.font = '16px Arial';
+            ctx.fillStyle = '#333';
+            ctx.fillText('적립식 투자 시뮬레이션', width / 2, 25);
+        }
+
+        // 키보드 네비게이션
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                previousSlide();
+            } else if (e.key === 'Home') {
+                goToSlide(1);
+            } else if (e.key === 'End') {
+                goToSlide(totalSlides);
+            }
+        });
+
+        // 마우스 클릭으로 다음 슬라이드
+        document.addEventListener('click', function(e) {
+            if (!e.target.classList.contains('nav-btn') && 
+                !e.target.closest('.input-container') && 
+                !e.target.closest('input') && 
+                !e.target.closest('button') &&
+                !e.target.closest('#investmentResult') &&
+                !e.target.closest('#detailedResult') &&
+                !e.target.closest('#simulationChart') &&
+                !e.target.closest('#dcaResult') &&
+                !e.target.closest('#dcaPriceChart') &&
+                !e.target.closest('#dcaSharesChart') &&
+                !e.target.closest('#dcaReturnChart') &&
+                !e.target.closest('#dcaValueChart') &&
+                !e.target.closest('#radarChart') &&
+                !e.target.closest('canvas')) {
+                nextSlide();
+            }
+        });
+
+        // 분할매수 시뮬레이션 함수
+        function runDCASimulation() {
+            const totalInvestment = parseFormattedNumber(document.getElementById('dcaTotalInvestment').value);
+            const initialPrice = parseFormattedNumber(document.getElementById('dcaInitialPrice').value);
+            const monthlyChange = parseFormattedNumber(document.getElementById('dcaMonthlyChange').value);
+            
+            if (totalInvestment <= 0 || initialPrice <= 0 || monthlyChange <= 0) {
+                document.getElementById('dcaResult').innerHTML = '<p style="color: red; text-align: center; margin: 0;">올바른 값을 입력해주세요.</p>';
+                return;
+            }
+            
+            const monthlyInvestment = totalInvestment / 12;
+            const months = 24;
+            
+            // 주가 데이터 생성 (dca-simulation.tsx 로직 참고)
+            const stockPrices = [];
+            let currentPrice = initialPrice;
+            for (let i = 0; i < 5; i++) { 
+                stockPrices.push(currentPrice); 
+                currentPrice -= monthlyChange; 
+            }
+            for (let i = 0; i < 19; i++) { 
+                stockPrices.push(currentPrice); 
+                currentPrice += monthlyChange; 
+            }
+            
+            // 일시불 투자 계산
+            const lumpSumInitialShares = stockPrices[0] > 0 ? totalInvestment / stockPrices[0] : 0;
+            const lumpSumValues = stockPrices.map(price => price * lumpSumInitialShares);
+            const lumpSumReturnRates = lumpSumValues.map(value => totalInvestment > 0 ? ((value / totalInvestment) - 1) * 100 : 0);
+            const lumpSumMinValueFirstYear = Math.min(...lumpSumValues.slice(0, 12));
+            const lumpSumMinReturn = totalInvestment > 0 ? ((lumpSumMinValueFirstYear / totalInvestment) - 1) * 100 : 0;
+            
+            // 분할매수 계산
+            const dcaSharesHistory = [];
+            const dcaValues = [];
+            const dcaReturnRates = [];
+            let dcaCumulativeShares = 0;
+            let dcaCumulativeInvested = 0;
+            let dcaMinReturn = 0;
+            
+            for (let i = 0; i < months; i++) {
+                if (i < 12) {
+                    dcaCumulativeShares += stockPrices[i] > 0 ? monthlyInvestment / stockPrices[i] : 0;
+                    dcaCumulativeInvested += monthlyInvestment;
+                }
+                dcaSharesHistory.push(dcaCumulativeShares);
+                const currentValue = dcaCumulativeShares * stockPrices[i];
+                dcaValues.push(currentValue);
+                const currentReturnRate = dcaCumulativeInvested > 0 ? ((currentValue / dcaCumulativeInvested) - 1) * 100 : 0;
+                dcaReturnRates.push(currentReturnRate);
+                if (i < 12 && currentReturnRate < dcaMinReturn) dcaMinReturn = currentReturnRate;
+            }
+            
+            // 결과 표시
+            const finalLumpSumValue = lumpSumValues[months - 1];
+            const finalDCAValue = dcaValues[months - 1];
+            const dcaFinalShares = dcaSharesHistory[11]; // 12개월 후 보유 주식
+            
+            document.getElementById('dcaResult').innerHTML = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 4px solid #e74c3c;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px;">
+                            <div>
+                                <p style="margin: 0; font-size: 14px; font-weight: 600; color: #7f8c8d;">12개월 후 일시불 보유 주식</p>
+                                <p style="margin: 5px 0 0 0; font-size: 24px; font-weight: bold; color: #2c3e50;">${lumpSumInitialShares.toFixed(2)} 주</p>
+                            </div>
+                            <div style="font-size: 32px; color: #e74c3c;">💰</div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 4px solid #3498db;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px;">
+                            <div>
+                                <p style="margin: 0; font-size: 14px; font-weight: 600; color: #7f8c8d;">12개월 후 분할매수 보유 주식</p>
+                                <p style="margin: 5px 0 0 0; font-size: 24px; font-weight: bold; color: #3498db;">${dcaFinalShares.toFixed(2)} 주</p>
+                            </div>
+                            <div style="font-size: 32px; color: #3498db;">💰</div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 4px solid #27ae60;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px;">
+                            <div>
+                                <p style="margin: 0; font-size: 14px; font-weight: 600; color: #7f8c8d;">12개월 내 일시불 최저 수익률</p>
+                                <p style="margin: 5px 0 0 0; font-size: 24px; font-weight: bold; color: #27ae60;">${lumpSumMinReturn.toFixed(2)} %</p>
+                            </div>
+                            <div style="font-size: 32px; color: #27ae60;">📊</div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 4px solid #27ae60;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px;">
+                            <div>
+                                <p style="margin: 0; font-size: 14px; font-weight: 600; color: #7f8c8d;">12개월 내 분할매수 최저 수익률</p>
+                                <p style="margin: 5px 0 0 0; font-size: 24px; font-weight: bold; color: #27ae60;">${dcaMinReturn.toFixed(2)} %</p>
+                            </div>
+                            <div style="font-size: 32px; color: #27ae60;">📊</div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 4px solid #3498db;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px;">
+                            <div>
+                                <p style="margin: 0; font-size: 14px; font-weight: 600; color: #7f8c8d;">24개월 후 일시불 자산</p>
+                                <p style="margin: 5px 0 0 0; font-size: 20px; font-weight: bold; color: #3498db;">${Math.round(finalLumpSumValue).toLocaleString()}원</p>
+                            </div>
+                            <div style="font-size: 32px; color: #3498db;">📈</div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 4px solid #3498db;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px;">
+                            <div>
+                                <p style="margin: 0; font-size: 14px; font-weight: 600; color: #7f8c8d;">24개월 후 분할매수 자산</p>
+                                <p style="margin: 5px 0 0 0; font-size: 20px; font-weight: bold; color: #3498db;">${Math.round(finalDCAValue).toLocaleString()}원</p>
+                            </div>
+                            <div style="font-size: 32px; color: #3498db;">📈</div>
+                        </div>
+                    </div>
+                </div>
+                
+            `;
+            
+            // 차트 그리기
+            drawDCAPriceChart(stockPrices);
+            drawDCASharesChart(stockPrices, lumpSumInitialShares, dcaSharesHistory);
+            drawDCAReturnChart(lumpSumReturnRates, dcaReturnRates);
+            drawDCAValueChart(lumpSumValues, dcaValues);
+        }
+        
+        // 월별 주가 변화 차트
+        function drawDCAPriceChart(stockPrices) {
+            const canvas = document.getElementById('dcaPriceChart');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            const width = canvas.width;
+            const height = canvas.height;
+            const padding = 40;
+            
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, width, height);
+            
+            const maxPrice = Math.max(...stockPrices);
+            const minPrice = Math.min(...stockPrices);
+            const maxIndex = stockPrices.length - 1;
+            
+            const getX = (index) => padding + (index / maxIndex) * (width - padding * 2);
+            const getY = (price) => height - padding - ((price - minPrice) / (maxPrice - minPrice)) * (height - padding * 2);
+            
+            // 그리드
+            ctx.strokeStyle = '#e0e0e0';
+            ctx.lineWidth = 1;
+            
+            for (let i = 0; i <= 24; i += 6) {
+                const x = getX(i);
+                ctx.beginPath();
+                ctx.moveTo(x, padding);
+                ctx.lineTo(x, height - padding);
+                ctx.stroke();
+            }
+            
+            for (let i = 0; i <= 5; i++) {
+                const price = minPrice + (maxPrice - minPrice) * (i / 5);
+                const y = getY(price);
+                ctx.beginPath();
+                ctx.moveTo(padding, y);
+                ctx.lineTo(width - padding, y);
+                ctx.stroke();
+            }
+            
+            // 주가 선
+            ctx.strokeStyle = '#2ecc71';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(getX(0), getY(stockPrices[0]));
+            for (let i = 1; i < stockPrices.length; i++) {
+                ctx.lineTo(getX(i), getY(stockPrices[i]));
+            }
+            ctx.stroke();
+            
+            // 축 레이블
+            ctx.fillStyle = '#333';
+            ctx.font = '10px Arial';
+            ctx.textAlign = 'center';
+            
+            for (let i = 0; i <= 24; i += 6) {
+                const x = getX(i);
+                ctx.fillText(`${i}개월`, x, height - 10);
+            }
+            
+            ctx.textAlign = 'right';
+            for (let i = 0; i <= 5; i++) {
+                const price = minPrice + (maxPrice - minPrice) * (i / 5);
+                const y = getY(price);
+                ctx.fillText(Math.round(price).toLocaleString(), padding - 5, y + 3);
+            }
+        }
+        
+        // 보유 주식 수 변화 차트
+        function drawDCASharesChart(stockPrices, lumpSumShares, dcaSharesHistory) {
+            const canvas = document.getElementById('dcaSharesChart');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            const width = canvas.width;
+            const height = canvas.height;
+            const padding = 40;
+            
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, width, height);
+            
+            const maxShares = Math.max(lumpSumShares, ...dcaSharesHistory);
+            const minShares = Math.min(lumpSumShares, ...dcaSharesHistory);
+            const maxIndex = stockPrices.length - 1;
+            
+            const getX = (index) => padding + (index / maxIndex) * (width - padding * 2);
+            const getY = (shares) => height - padding - ((shares - minShares) / (maxShares - minShares)) * (height - padding * 2);
+            
+            // 그리드
+            ctx.strokeStyle = '#e0e0e0';
+            ctx.lineWidth = 1;
+            
+            for (let i = 0; i <= 24; i += 6) {
+                const x = getX(i);
+                ctx.beginPath();
+                ctx.moveTo(x, padding);
+                ctx.lineTo(x, height - padding);
+                ctx.stroke();
+            }
+            
+            for (let i = 0; i <= 5; i++) {
+                const shares = minShares + (maxShares - minShares) * (i / 5);
+                const y = getY(shares);
+                ctx.beginPath();
+                ctx.moveTo(padding, y);
+                ctx.lineTo(width - padding, y);
+                ctx.stroke();
+            }
+            
+            // 일시불 선 (빨간색)
+            ctx.strokeStyle = '#e74c3c';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            for (let i = 0; i < stockPrices.length; i++) {
+                ctx.lineTo(getX(i), getY(lumpSumShares));
+            }
+            ctx.stroke();
+            
+            // 분할매수 선 (파란색)
+            ctx.strokeStyle = '#3498db';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(getX(0), getY(dcaSharesHistory[0]));
+            for (let i = 1; i < dcaSharesHistory.length; i++) {
+                ctx.lineTo(getX(i), getY(dcaSharesHistory[i]));
+            }
+            ctx.stroke();
+            
+            // 축 레이블
+            ctx.fillStyle = '#333';
+            ctx.font = '10px Arial';
+            ctx.textAlign = 'center';
+            
+            for (let i = 0; i <= 24; i += 6) {
+                const x = getX(i);
+                ctx.fillText(`${i}개월`, x, height - 10);
+            }
+            
+            ctx.textAlign = 'right';
+            for (let i = 0; i <= 5; i++) {
+                const shares = minShares + (maxShares - minShares) * (i / 5);
+                const y = getY(shares);
+                ctx.fillText(shares.toFixed(0), padding - 5, y + 3);
+            }
+            
+            // 범례
+            ctx.textAlign = 'left';
+            ctx.font = '12px Arial';
+            
+            ctx.fillStyle = '#e74c3c';
+            ctx.fillRect(width - 80, 20, 12, 12);
+            ctx.fillStyle = '#333';
+            ctx.fillText('일시불', width - 65, 30);
+            
+            ctx.fillStyle = '#3498db';
+            ctx.fillRect(width - 80, 40, 12, 12);
+            ctx.fillStyle = '#333';
+            ctx.fillText('분할매수', width - 65, 50);
+        }
+        
+        // 수익률 변화 차트
+        function drawDCAReturnChart(lumpSumReturns, dcaReturns) {
+            const canvas = document.getElementById('dcaReturnChart');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            const width = canvas.width;
+            const height = canvas.height;
+            const padding = 40;
+            
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, width, height);
+            
+            const maxReturn = Math.max(...lumpSumReturns, ...dcaReturns);
+            const minReturn = Math.min(...lumpSumReturns, ...dcaReturns);
+            const maxIndex = lumpSumReturns.length - 1;
+            
+            const getX = (index) => padding + (index / maxIndex) * (width - padding * 2);
+            const getY = (returnRate) => height - padding - ((returnRate - minReturn) / (maxReturn - minReturn)) * (height - padding * 2);
+            
+            // 그리드
+            ctx.strokeStyle = '#e0e0e0';
+            ctx.lineWidth = 1;
+            
+            for (let i = 0; i <= 24; i += 6) {
+                const x = getX(i);
+                ctx.beginPath();
+                ctx.moveTo(x, padding);
+                ctx.lineTo(x, height - padding);
+                ctx.stroke();
+            }
+            
+            for (let i = 0; i <= 5; i++) {
+                const returnRate = minReturn + (maxReturn - minReturn) * (i / 5);
+                const y = getY(returnRate);
+                ctx.beginPath();
+                ctx.moveTo(padding, y);
+                ctx.lineTo(width - padding, y);
+                ctx.stroke();
+            }
+            
+            // 일시불 선 (빨간색)
+            ctx.strokeStyle = '#e74c3c';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(getX(0), getY(lumpSumReturns[0]));
+            for (let i = 1; i < lumpSumReturns.length; i++) {
+                ctx.lineTo(getX(i), getY(lumpSumReturns[i]));
+            }
+            ctx.stroke();
+            
+            // 분할매수 선 (파란색)
+            ctx.strokeStyle = '#3498db';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(getX(0), getY(dcaReturns[0]));
+            for (let i = 1; i < dcaReturns.length; i++) {
+                ctx.lineTo(getX(i), getY(dcaReturns[i]));
+            }
+            ctx.stroke();
+            
+            // 축 레이블
+            ctx.fillStyle = '#333';
+            ctx.font = '10px Arial';
+            ctx.textAlign = 'center';
+            
+            for (let i = 0; i <= 24; i += 6) {
+                const x = getX(i);
+                ctx.fillText(`${i}개월`, x, height - 10);
+            }
+            
+            ctx.textAlign = 'right';
+            for (let i = 0; i <= 5; i++) {
+                const returnRate = minReturn + (maxReturn - minReturn) * (i / 5);
+                const y = getY(returnRate);
+                ctx.fillText(returnRate.toFixed(1) + '%', padding - 5, y + 3);
+            }
+            
+            // 범례
+            ctx.textAlign = 'left';
+            ctx.font = '12px Arial';
+            
+            ctx.fillStyle = '#e74c3c';
+            ctx.fillRect(width - 80, 20, 12, 12);
+            ctx.fillStyle = '#333';
+            ctx.fillText('일시불', width - 65, 30);
+            
+            ctx.fillStyle = '#3498db';
+            ctx.fillRect(width - 80, 40, 12, 12);
+            ctx.fillStyle = '#333';
+            ctx.fillText('분할매수', width - 65, 50);
+        }
+        
+        // 자산 가치 변화 차트
+        function drawDCAValueChart(lumpSumValues, dcaValues) {
+            const canvas = document.getElementById('dcaValueChart');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            const width = canvas.width;
+            const height = canvas.height;
+            const padding = 40;
+            
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, width, height);
+            
+            const maxValue = Math.max(...lumpSumValues, ...dcaValues);
+            const minValue = Math.min(...lumpSumValues, ...dcaValues);
+            const maxIndex = lumpSumValues.length - 1;
+            
+            const getX = (index) => padding + (index / maxIndex) * (width - padding * 2);
+            const getY = (value) => height - padding - ((value - minValue) / (maxValue - minValue)) * (height - padding * 2);
+            
+            // 그리드
+            ctx.strokeStyle = '#e0e0e0';
+            ctx.lineWidth = 1;
+            
+            for (let i = 0; i <= 24; i += 6) {
+                const x = getX(i);
+                ctx.beginPath();
+                ctx.moveTo(x, padding);
+                ctx.lineTo(x, height - padding);
+                ctx.stroke();
+            }
+            
+            for (let i = 0; i <= 5; i++) {
+                const value = minValue + (maxValue - minValue) * (i / 5);
+                const y = getY(value);
+                ctx.beginPath();
+                ctx.moveTo(padding, y);
+                ctx.lineTo(width - padding, y);
+                ctx.stroke();
+            }
+            
+            // 일시불 선 (빨간색)
+            ctx.strokeStyle = '#e74c3c';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(getX(0), getY(lumpSumValues[0]));
+            for (let i = 1; i < lumpSumValues.length; i++) {
+                ctx.lineTo(getX(i), getY(lumpSumValues[i]));
+            }
+            ctx.stroke();
+            
+            // 분할매수 선 (파란색)
+            ctx.strokeStyle = '#3498db';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(getX(0), getY(dcaValues[0]));
+            for (let i = 1; i < dcaValues.length; i++) {
+                ctx.lineTo(getX(i), getY(dcaValues[i]));
+            }
+            ctx.stroke();
+            
+            // 축 레이블
+            ctx.fillStyle = '#333';
+            ctx.font = '10px Arial';
+            ctx.textAlign = 'center';
+            
+            for (let i = 0; i <= 24; i += 6) {
+                const x = getX(i);
+                ctx.fillText(`${i}개월`, x, height - 10);
+            }
+            
+            ctx.textAlign = 'right';
+            for (let i = 0; i <= 5; i++) {
+                const value = minValue + (maxValue - minValue) * (i / 5);
+                const y = getY(value);
+                const text = value >= 1000000000 ? (value / 1000000000).toFixed(1) + '십억' :
+                            value >= 100000000 ? (value / 100000000).toFixed(1) + '억' :
+                            value >= 10000000 ? (value / 10000000).toFixed(1) + '천만' :
+                            (value / 1000000).toFixed(1) + '백만';
+                ctx.fillText(text, padding - 5, y + 3);
+            }
+            
+            // 범례
+            ctx.textAlign = 'left';
+            ctx.font = '12px Arial';
+            
+            ctx.fillStyle = '#e74c3c';
+            ctx.fillRect(width - 80, 20, 12, 12);
+            ctx.fillStyle = '#333';
+            ctx.fillText('일시불', width - 65, 30);
+            
+            ctx.fillStyle = '#3498db';
+            ctx.fillRect(width - 80, 40, 12, 12);
+            ctx.fillStyle = '#333';
+            ctx.fillText('분할매수', width - 65, 50);
+        }
+
+        // 레이다 차트 변수
+        let radarChart = null;
+
+        // 레이다 차트 초기화 함수
+        function initRadarChart() {
+            const ctx = document.getElementById('radarChart');
+            if (!ctx) return;
+            
+            const data = {
+                labels: ['교환 매개체', '가치 저장', '가치 척도', '희소성', '대체가능성', '통일성', '내구성', '구별성'],
+                datasets: [
+                    {
+                        label: '금 (Gold)',
+                        data: [3, 5, 2, 5, 3, 3, 5, 4],
+                        backgroundColor: 'rgba(255, 215, 0, 0.2)',
+                        borderColor: 'rgba(255, 215, 0, 1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: 'rgba(255, 215, 0, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(255, 215, 0, 1)'
+                    },
+                    {
+                        label: '법정화폐 (Fiat)',
+                        data: [5, 3, 5, 2, 5, 5, 4, 3],
+                        backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                        borderColor: 'rgba(52, 152, 219, 1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: 'rgba(52, 152, 219, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(52, 152, 219, 1)'
+                    },
+                    {
+                        label: '비트코인 (Bitcoin)',
+                        data: [4, 5, 4, 5, 5, 5, 5, 5],
+                        backgroundColor: 'rgba(39, 174, 96, 0.2)',
+                        borderColor: 'rgba(39, 174, 96, 1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: 'rgba(39, 174, 96, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(39, 174, 96, 1)'
+                    }
+                ]
+            };
+
+            const config = {
+                type: 'radar',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '금, 법정화폐, 비트코인 화폐 속성 비교',
+                            font: {
+                                size: 18,
+                                weight: 'bold'
+                            },
+                            color: '#2c3e50'
+                        },
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 20,
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                },
+                                generateLabels: function(chart) {
+                                    const datasets = chart.data.datasets;
+                                    return datasets.map((dataset, i) => ({
+                                        text: dataset.label,
+                                        fillStyle: dataset.backgroundColor,
+                                        strokeStyle: dataset.borderColor,
+                                        lineWidth: 2,
+                                        pointStyle: 'circle',
+                                        hidden: !chart.isDatasetVisible(i),
+                                        index: i
+                                    }));
+                                }
+                            },
+                            onClick: function(e, legendItem, legend) {
+                                const index = legendItem.index;
+                                const ci = legend.chart;
+                                const meta = ci.getDatasetMeta(index);
+                                
+                                // 데이터셋의 가시성 토글
+                                meta.hidden = !meta.hidden;
+                                ci.update();
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.dataset.label || '';
+                                    const value = context.parsed.r;
+                                    return label + ': ' + value + '점';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 5,
+                            min: 0,
+                            ticks: {
+                                stepSize: 1,
+                                font: {
+                                    size: 12
+                                },
+                                color: '#666'
+                            },
+                            pointLabels: {
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                },
+                                color: '#2c3e50',
+                                padding: 15
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            },
+                            angleLines: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        }
+                    },
+                    elements: {
+                        point: {
+                            radius: 6,
+                            hoverRadius: 8
+                        }
+                    }
+                }
+            };
+
+            // 기존 차트가 있으면 제거
+            if (radarChart) {
+                radarChart.destroy();
+            }
+
+            // 새 차트 생성
+            radarChart = new Chart(ctx, config);
+        }
+
+        // 슬라이드 변경 시 레이다 차트 초기화
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            if (n > totalSlides) currentSlide = 1;
+            if (n < 1) currentSlide = totalSlides;
+            
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[currentSlide - 1].classList.add('active');
+            
+            // 슬라이드 17번일 때 레이다 차트 초기화
+            if (currentSlide === 17) {
+                setTimeout(() => {
+                    initRadarChart();
+                }, 100);
+            }
+        }
+
+        // 초기 슬라이드 표시
+        showSlide(1);
+    </script>
+</body>
+</html>
